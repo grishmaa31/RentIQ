@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
@@ -48,8 +49,16 @@ def perform_clustering(df):
 
     sample_size = min(5000, len(scaled_data))
 
-    sample_data = scaled_data[:sample_size]
-    sample_labels = labels[:sample_size]
+    rng = np.random.default_rng(42)
+
+    sample_indices = rng.choice(
+        len(scaled_data),
+        size=sample_size,
+        replace=False
+    )
+
+    sample_data = scaled_data[sample_indices]
+    sample_labels = labels[sample_indices]
 
     score = silhouette_score(
         sample_data,
